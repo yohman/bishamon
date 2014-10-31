@@ -1,0 +1,28 @@
+namespace.request("Intro", Bishamon);
+
+Bishamon.Intro = (function () {
+	var _show = function () {
+		
+		$('#modal-intro').modal({
+			keyboard: false,
+			backdrop: 'static'
+		})
+	};
+
+	return {
+		init: function (_city) {
+			console.log(_city)
+			_show();
+			
+			//change city in intro box
+			if(_city == 'namie')
+			{
+				$('.display-city').html('浪江町')
+			}
+
+			//Translate
+			
+			
+		}
+	}
+})();

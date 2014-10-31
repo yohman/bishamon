@@ -1,0 +1,301 @@
+namespace.request("GridLayer", Bishamon);
+
+Bishamon.GridLayer = (function () {
+    var _map = null,
+        _activeLayers = [],
+        _radiationMarkers = [],
+        _radiationMarkerStyle = {
+            icon: 'images/radiationmarker.png',
+            labelContent: "",
+            labelAnchor: new google.maps.Point(12, 30),
+            labelClass: "labels", // the CSS class for the label
+            labelInBackground: false
+        },
+        _distances = ['3200', '1600', '800', '400', '200', '100', 
+            '50', 'RadPoints'
+        ],
+        _layers = {
+            '3200': {
+                'timeIds' : {
+                    '2011_Q4' : 3431586, 
+                    '2012_01' : 3439381,
+                    '2012_02' : 3439392,
+                    '2012_03' : 3447784,
+                    '2012_Q1' : 3448839
+                }
+            }, 
+            '1600' : {
+                'timeIds' : {
+                    '2011_Q4' : 3432120, 
+                    '2012_01' : 3440149,
+                    '2012_02' : 3440067,
+                    '2012_03' : 3448832,
+                    '2012_Q1' : 3448255
+                }
+            }, 
+            '800': {
+                'timeIds' : {
+                    '2011_Q4' : 3430970, 
+                    '2012_01' : 3440150,
+                    '2012_02' : 3439391,
+                    '2012_03' : 3448238,
+                    '2012_Q1' : 3448840
+                }
+            },
+            '400': {
+                'timeIds' : {
+                    '2011_Q4' : 3448257,
+                    '2012_01' : 3441124,
+                    '2012_02' : 3441218,
+                    '2012_03' : 3446688,
+                    '2012_Q1' : 3446698
+                }
+            },
+            '200': {
+                'timeIds' : {
+                    '2011_Q4' : 3430853, 
+                    '2012_01' : 3440056,
+                    '2012_02' : 3441152,
+                    '2012_03' : 3448237,
+                    '2012_Q1' : 3447798
+                }
+            },
+            '100': {
+                'timeIds' : {
+                    '2011_Q4' : 3431045,
+                    '2012_01' : 3441212,
+                    '2012_02' : 3440157,
+                    '2012_03' : 3448436,
+                    '2012_Q1' : 3448452
+                }
+            },
+            '50': {
+                'timeIds' : {
+                    '2011_Q4' : 3431044,
+                    '2012_01' : 3441213,
+                    '2012_02' : 3441151,
+                    '2012_03' : 3448437,
+                    '2012_Q1' : 3526051
+                }
+            }, 'RadPoints': {
+                'timeIds' : {
+                    '2011_Q4' : 3097055,
+                    '2012_01' : 2961353,
+                    '2012_02' : 3100430,
+                    '2012_03' : 3322722,
+                    '2012_Q1' : null //too many points to show on fusion tables(> 100k)
+                }
+            } 
+        },
+        _clipToCity = null,
+        _cityClipPoints = null
+    ;
+    // Add Fusion Table layer objects and event listeners
+    for (var i in _distances) {
+        var distance = _distances[i];
+        _layers[distance].layerObject = new google.maps.FusionTablesLayer({
+            clickable: true,
+            suppressInfoWindows: true 
+        });
+        google.maps.event.addListener(_layers[distance].layerObject,
+            'click',
+            function ($e) {
+                _displayRadiationMarker($e);
+            }
+        );
+    }
+    // Radiation points is special. TODO: Talk to Yoh about this
+    _layers['RadPoints'].layerObject = new google.maps.FusionTablesLayer({
+		clickable: true,
+		suppressInfoWindows: false
+	});
+
+    var _regenerateQuery = function ($layer, $select, $date, $clip) {
+        return {
+            query: {
+                select: $select,
+                from: $layer.timeIds[$date],
+                where: $clip
+            }
+        }
+    };
+
+    var _displayRadiationMarker = function ($e) {
+			
+        var samples = '';
+
+        if(typeof $e.row.Join_Count !== "undefined") {
+            samples = $e.row.Join_Count.value;
+        }
+        $('#micro').show();
+        $('#micro-radiation').html(Math.round($e.row.radiation.value*100)/100);
+        
+		var extrahtml = '';
+		//show city and count if it exists
+		if(typeof $e.row.PREF !== "undefined") 
+		{
+			extrahtml = '<div style="font-size:24px;color:#fff;">' + $e.row.PREF.value + ' ' + $e.row.CITY2.value + '</div>';
+		} 
+
+		if(typeof $e.row.Join_Count !== "undefined") 
+		{
+			extrahtml += '( 測定ポイント数 ' + $e.row.Join_Count.value+' )';
+		} 
+
+		$('#micro-extra').html(extrahtml);
+        $('#micro-samples').html(samples);
+        $('#micro-instructions').hide();
+		
+        var marker = new MarkerWithLabel(_radiationMarkerStyle);
+        var index = _radiationMarkers.push(marker);
+        _radiationMarkers[index-1].setPosition(new google.maps.LatLng(
+            $e.latLng.lat(), $e.latLng.lng())
+        );
+        _radiationMarkers[index-1].set('labelContent', 
+            Math.round($e.row.radiation.value*100)/100
+        );
+        _radiationMarkers[index-1].setMap(_map);
+        
+        // var breakPoint = Bishamon.RadiationSlider.getRadiationBreakpoint(
+        var color = Bishamon.RadiationSlider.getRadiationBreakpoint(
+            Math.round($e.row.radiation.value*100)/100
+        );
+        _radiationMarkers[index-1].setOptions({
+            icon: 'images/radiationmarker_' + color.fileKey + '.png'
+        });
+        
+		$('#radiationmarkerimage').attr('src',
+            'images/radiationmarker_' + color.fileKey + '.png'
+        ); 
+        $('#micro-radiation').css('color', color.color);
+		
+        //Let user delete the marker by clicking on it again
+        google.maps.event.addListener(_radiationMarkers[index-1],
+            'click', function() { 
+                _radiationMarkers[index-1].setMap(null); 
+            }
+        );
+    };
+	
+    var _layerZoomLevels = {
+        '10' : '1600',
+        '11' : '800',
+        '12' : '400',
+        '13' : '200',
+        '14' : '100',
+        '15' : '50',
+        '16' : '50'
+    };
+    var _selectLayerToShow = function ($styles) {
+        if ($styles != undefined) {
+            var styles = [];
+            for (var i in $styles) {
+                styles.push($styles[i]);
+            }
+            styles.reverse();
+            for (var d in _layers) {
+				if (d != "RadPoints") _layers[d].layerObject.setOptions({styles: styles});
+            }
+        }
+
+        for (var l in _activeLayers) {
+            _layers[_activeLayers[l]].layerObject.setMap(null);
+        }
+        _activeLayers = [];
+        var zoom = _map.getZoom();
+
+        if (zoom < 10) {
+            _activeLayers.push(3200);
+        } else if (zoom >= 10 && zoom <= 16) {
+            _activeLayers.push(_layerZoomLevels[zoom]);
+        } else if (zoom >= 17) {
+            _activeLayers.push(50, 'RadPoints');
+        }
+        for (var l in _activeLayers) {
+			/*
+            setTimeout( function (i) {
+                return function () {
+                    console.log(i);
+			*/
+                    _layers[_activeLayers[l]].layerObject.setMap(_map);
+					/*
+                }
+            }(l), (parseInt(l) + 1) * 800);
+			*/
+            
+        }
+    }
+
+    /**
+	 * Date is provided in element ID, like "radio-2011_Q4"
+	 */
+    var _changeDate = function ($id) {
+		//toggle button classes
+		$('#toggledate').children().removeClass('active');
+		$('#'+$id).addClass('active');
+		$('#date-display').html($('#'+$id).html());
+
+        var date = $id.split("-")[1];	
+        if (date == undefined) {
+            date = $id;
+        }
+        for (var l in _layers) {
+            var layer = _layers[l],
+                select = (l == "RadPoints") ? 'Latitude' : 'geometry',
+                clip = (l == "RadPoints") ? _cityClipPoints : _clipToCity ;
+            layer.layerObject.setOptions(_regenerateQuery(layer, select, date, clip));
+        }	
+    };
+
+    var _clickHandler = function ($e) {
+        var id = $e.target.id;
+        _changeDate(id);
+        $e.stopPropagation();
+        return false;
+    };
+
+    return {
+        init : function ($map, $options) {
+            _map = $map;
+            _clipToCity = $options.clipToCity;
+            _cityClipPoints = $options.cityClipPoints;
+			
+            // event listener
+            $("#toggledate").click(_clickHandler);
+<<<<<<< .mine
+			
+			//change the default date depending on the city accessed
+            if($options.city == 'namie')
+            {
+	            _changeDate("radio-2011_Q4");
+            }
+            else
+            {
+            	_changeDate("radio-2012_Q1");
+            }
+=======
+            var date = "2012_Q1";
+            if (typeof $options["city"] != "undefined") {
+                date = (typeof Bishamon.Config[$options.city] != "undefined") 
+                        ? Bishamon.Config[$options.city].GridLayer.defaultDate
+                        : date
+                ;
+            }
+            _changeDate("radio-" + date);
+>>>>>>> .r29
+            // On zoom end, redraw layer and erase all markers
+            Bishamon.registerRefreshAction(function () {
+                _selectLayerToShow();
+                for (var i in _radiationMarkers) {
+                    _radiationMarkers[i].setMap(null);
+                }
+                _radiationMarkers = [];
+                $('#micro-radiation').html(''); //erase the existing radiation reading
+                $('#micro-extra').html(''); //erase the existing radiation reading
+            });
+        },
+        redraw: function ($styles) {
+            _selectLayerToShow($styles);
+        }
+    }
+})();

@@ -1,0 +1,74 @@
+<!DOCTYPE>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Bishamon Radiation Project (Niigata University/UCLA)</title>
+
+
+<script src="https://www.google.com/jsapi?key=ABQIAAAAtHf2Vbojx_f9l2digk62nRQrFBHKr9qV1AY9zGQXZj2IXqamtBTXjHzZ8RX1a7noo8OD71G1CLxKFg" type="text/javascript"></script>
+<script type="text/javascript">
+    //Load libraries
+    google.load("jquery", "1.7.1");
+    google.load("jqueryui", "1.8.16");
+</script>
+
+<!-- Google Maps -->
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places" type="text/javascript"></script>
+
+
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+<script type="text/javascript">
+
+function init()
+{
+
+	var mapOptions = {
+      center: new google.maps.LatLng(37.62740558792578, 140.92251739999995),
+      zoom: 8,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+    var map2 = new google.maps.Map(document.getElementById("map_canvas2"), mapOptions);
+
+	var layer = new google.maps.FusionTablesLayer({
+	  query: {
+	    select: 'geometry',
+	    from: '5169128'
+	  }
+	});
+	var layer2 = new google.maps.FusionTablesLayer({
+	  query: {
+	    select: 'geometry',
+	    from: '3448839'
+	  }
+	});
+	layer.setMap(map);
+	layer2.setMap(map2);
+
+
+	//adding event listener to sync maps
+	google.maps.event.addListener(map, 'drag', function(event) {
+		map2.panTo(map.getCenter());
+	});
+	google.maps.event.addListener(map, 'zoom_changed', function(event) {
+		map2.setZoom(map.getZoom());
+	});
+}
+
+$(document).ready(function() {
+	init();
+});
+
+</script>
+
+</head>
+<body>
+
+<div id="map_canvas" style="width:50%; height:100%;float:left;"></div>
+<div id="map_canvas2" style="width:50%; height:100%;background:pink;float:left"></div>
+
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+namespace.request("Config", Bishamon);
+
+/**
+ * The general format for these:
+ * cityName: {
+ *  moduleName: {
+ *   option1: {
+ * ....
+ */
+Bishamon.Config = {
+    namie: {
+        GridLayer: {
+<<<<<<< .mine
+            defaultDate: "2011_Q4"
+=======
+            defaultDate: "2011_Q4"
+        },
+        RadiationSlider: {
+            maxRange: 5.0,
+            catRanges: [0.3, 0.6, 0.9, 1.2, 2.0]
+>>>>>>> .r30
+        }
+    }
+};

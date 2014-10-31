@@ -1,0 +1,425 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Bishamon Radiation Project (Niigata University/UCLA)</title>
+
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+<link rel="stylesheet" type="text/css" href="css/custom-theme/jquery-ui-1.8.17.custom.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
+
+<script src="https://www.google.com/jsapi?key=ABQIAAAAtHf2Vbojx_f9l2digk62nRQrFBHKr9qV1AY9zGQXZj2IXqamtBTXjHzZ8RX1a7noo8OD71G1CLxKFg" type="text/javascript"></script>
+<script type="text/javascript">
+    //Load libraries
+    google.load("jquery", "1.7.1");
+    google.load("jqueryui", "1.8.16");
+</script>
+
+<!-- Javascript that enables resizing radiation category levels dynamically -->
+<script  src="js/colResizable-1.3.min.js"></script>
+
+<!-- Google Maps -->
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places" type="text/javascript"></script>
+
+<!-- Marker with label -->
+<script src="js/markerwithlabel_packed.js"></script>
+
+<!-- Bishamon-specific Javascript -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/namespace.js"></script>
+<script src="js/Bishamon.js"></script>
+<script src="js/Bishamon.Config.js"></script>
+<script src="js/Bishamon.CitySearch.js"></script>
+<script src="js/Bishamon.GridLayer.js"></script>
+<script src="js/Bishamon.Intro.js"></script>
+<script src="js/Bishamon.LayerSelector.js"></script>
+<script src="js/Bishamon.RadiationSlider.js"></script>
+
+
+<script>
+$(Bishamon.init);
+$('#myModal').modal();
+
+$('.tabs').button();
+
+$(document).ready(function() {
+	
+	if ( 	navigator.userAgent.match(/Android/i)
+		|| 	navigator.userAgent.match(/webOS/i)
+		|| 	navigator.userAgent.match(/iPhone/i)
+		|| 	navigator.userAgent.match(/BlackBerry/i)
+	)
+	{
+		
+		$('#myModal').modal('toggle');
+		$('#cat-ranges').hide();
+		$('#micro').hide();
+		
+	}
+
+});
+
+</script>
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30890374-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</head>
+<body style="background:black">
+
+<!-- Nav bar -->
+<div class="navbar navbar-inverse" style="position: static;">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".subnav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			<a class="brand" href="#">Bishamon 毘</a>
+			<div class="nav-collapse subnav-collapse">
+				<ul class="nav">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="display-maptype">地図種類</span> <span id="maptype-display"></span> <b class="caret"></b></a>
+						<ul class="dropdown-menu" id="toggle-map-type">
+							<li><a href="#" id="map-night">Night</a></li>
+							<li><a href="#" id="map-light" >Light</a></li>
+							<li><a href="#" id="map-regular" >Map</a></li>
+							<li><a href="#" id="map-satellite" >Satellite</a></li>
+							<li><a href="#" id="map-terrain" >Terrain</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="display-view">View</span> <span id="view-display"></span> <b class="caret"></b></a>
+						<ul class="dropdown-menu" id="toggle-view">
+							<li><a href="#" id="view-single">Single map</a></li>
+							<li><a href="#" id="view-dual" >Dual map</a></li>
+						</ul>
+					</li>
+					<li><a data-toggle="modal" href="#modal-legend"><span id="display-layers">レイヤー</span></a></li>
+				</ul>
+
+
+				<ul class="nav pull-right">
+					<form class="navbar-search pull-left" action="">
+						<input class="input-medium search-query " onFocus="$(this).animate({width:'400px'});" onBlur="$(this).animate({width:'200px'});" type="text"  id="location" placeholder="場所検索">
+
+					</form>
+					<li class="active"><a data-toggle="modal" href="#modal-intro" onClick="$('#intro-close').show();$('#intro-close-button').show();$('#intro-red-button').hide();">About</a></li>
+					<li class="divider-vertical"></li>
+				</ul>
+			</div><!-- /.nav-collapse -->
+		</div>
+	</div><!-- /navbar-inner -->
+</div>
+
+	<div id="btn-group-date1" class="btn-toolbar" style="position:absolute;margin-bottom:10px;font-size:11px;  top:50px; right:0%; margin-right:10px; z-index:10;">
+		<div class="btn-group " style="z-index:1000000;">
+			<button class="btn btn-info btn-large dropdown-toggle" id="btn-date1" data-toggle="dropdown"><span style="color:#999"></span> <span id="date-display"></span><span class="caret"></span></button>
+			<ul class="dropdown-menu" id="toggledate">
+				<li id="dropdown-2011_Q4"><a href="#" id="left_radio-2011_Q4" >2011年 9月-12月</a></li>
+				<li id="dropdown-2012_Q1"><a href="#" id="left_radio-2012_Q1" >2012年 1月-3月</a></li>
+				<li id="dropdown-2012_Q3"><a href="#" id="left_radio-2012_Q3" >2012年 7月-9月</a></li>
+				<li id="dropdown-2013_Q1"><a href="#" id="left_radio-2013_Q1" >2013年 2月-3月</a></li>
+				<li id="dropdown-2013_09"><a href="#" id="left_radio-2013_09" >2013年 9月-11月</a></li>
+				<li id="dropdown-2014_08"><a href="#" id="left_radio-2014_08" >2014年 8月-9月</a></li>
+			</ul>
+		</div>
+	</div>
+	<!--
+		Toolbar
+	-->
+	<div class="btn-toolbar" style="position:absolute;margin-bottom:10px;font-size:11px;  top:50px; right:10px; z-index:10;">
+			<!-- <div class="btn-group ">
+				<button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"><span id="display-maptype">地図種類</span> <span id="maptype-display"></span> <span class="caret"></span></button>
+				<ul class="dropdown-menu" id="toggle-map-type">
+					<li><a href="#" id="map-night">Night</a></li>
+					<li><a href="#" id="map-light" >Light</a></li>
+					<li><a href="#" id="map-regular" >Map</a></li>
+					<li><a href="#" id="map-satellite" >Satellite</a></li>
+					<li><a href="#" id="map-terrain" >Terrain</a></li>
+				</ul>
+			</div> -->
+
+
+
+			<!-- dual -->
+			<div class="btn-group " id="btn-group-date2" style="display: none;">
+				<button class="btn btn-info btn-large dropdown-toggle" id="btn-date2" data-toggle="dropdown"><span style="color:#999"></span> <span id="date-display2"></span><span class="caret"></span></button>
+				<ul class="dropdown-menu" id="toggledate2">
+					<li id="dropdown-2011_Q4"><a href="#" id="right_radio-2011_Q4" >2011年 9月-12月</a></li>
+					<li id="dropdown-2012_Q1"><a href="#" id="right_radio-2012_Q1" >2012年 1月-3月</a></li>
+					<li id="dropdown-2012_Q3"><a href="#" id="right_radio-2012_Q3" >2012年 7月-9月</a></li>
+					<li id="dropdown-2013_Q1"><a href="#" id="right_radio-2013_Q1" >2013年 2月-3月</a></li>
+					<li id="dropdown-2013_09"><a href="#" id="right_radio-2013_09" >2013年 9月-11月</a></li>
+					<li id="dropdown-2014_08"><a href="#" id="right_radio-2014_08" >2014年 8月-9月</a></li>
+				</ul>
+			</div>
+			<!-- Layers 
+			<div class="btn-group ">
+				<button class="btn" data-toggle="modal" href="#modal-legend"><img src="images/options.png"><span id="display-layers">レイヤー</span></button>
+			</div>-->
+			<!-- Search 
+			<div class="btn-group ">
+				<button class="btn" data-toggle="modal" href="#modal-search"><img src="images/search.png"><span id="display-search">検索</span></button>
+			</div>-->
+			<!-- Dual View 
+			<div class="btn-group ">
+				<button class="btn" id="toggle-dual-view"><img src="http://icons.iconarchive.com/icons/yusuke-kamiyamane/fugue/16/layout-split-icon.png"></button>
+			</div>-->
+
+
+			
+			<!-- About 
+			<div class="btn-group ">
+				<button class="btn btn-info" data-toggle="modal" href="#modal-intro" onClick="$('#intro-close').show();$('#intro-close-button').show();$('#intro-red-button').hide();"><img src="http://cdn1.iconfinder.com/data/icons/defaulticon/icons/png/16x16/help.png"></button>
+			</div>-->
+	</div>
+
+	<div id="map_canvas"></div>
+	<div class="reticule" style="display:none;"><img src="images/target.png" /></div>
+	<div id="map_canvas2"></div>
+	<div class="reticule2" style="display:none;"><img src="images/target.png" /></div>
+
+<div class="modal show fade" id="modal-intro">
+    <div class="modal-header">
+		<a class="close" data-dismiss="modal" id="intro-close" style="display: none;">×</a>
+        <img class="close" src="images/bishamon.jpg" style="height: 60px;opacity:1;" />
+        <ul class="nav nav-pills" style="margin: 15px 0px 0px 0px;">
+            <li class="active"><a href="#1" data-toggle="tab">ようこそ</a></li>
+            <li><a href="#2" data-toggle="tab">詳しい説明</a></li>
+            <li><a href="#3" data-toggle="tab">このプロジェクトについて</a></li>
+        </ul>
+    </div>
+    <div class="modal-body" style="height: 300px;">
+        <div class="tabbable">
+            <div class="tab-content">
+                <div class="tab-pane active" id="1">
+					<h1><span class="display-city">南相馬市</span>　空間線量率地図（Web版）の利用について</h1>
+					<p>このページは新潟大学、UCLA（米国カリフォルニア大学ロサンゼルス校）と<span class="display-city">南相馬市</span>の協力により作成している<span class="display-city">南相馬市</span>内の道路上の空間線量率を示したWeb-mapです。注意事項をよくお読みいただき、ご活用下さい（最下部のチェックボックスにチェックを入れるとWeb-mapを見ることができます）。</p>
+					<h2>１．利用規約及び使用条件</h2>
+					<ul>
+					<li><p>この規約は、本サイトを利用するにあたっての諸条件を規定するものです。この規約において、「利用者」とは、本サイトを利用する者をいい、「マップ」とは、本サイトで公開されているWeb-mapをさします。</p></li>
+					<li><p>このマップは新潟大学、UCLAと<span class="display-city">南相馬市</span>の共同で作成されたものです。いかなる理由があっても、マップまたはデータを無断で転載・転用することを禁じます。</p></li>
+					<li><p>本サイトの利用にあたっては、著作権その他の権利を保有している者の財産権はもとより人格権を含めた権利を傷つけまたは侵害してはなりません。</p></li>
+					<li><p>利用者は、本サイトで得られた情報を営利目的で利用することはできません。</p></li>
+					<li><p>本サイトで提供されるマップについて、他の資料等に引用する際は、「<span class="display-city">南相馬市</span>　空間線量率地図（Web版）」からの出典である旨を必ず明示してください。</p></li>
+					<li><p>本サイトは、Googleマップサービスを使用しております。その利用にあたっては、Googleマップの利用規約に従い利用してください。</p></li>
+					<li><p>利用者は、インターネットを利用する方のためのルール＆マナー集（http://www.iajapan.org/rule/　財団法人インターネット協会）を守ってください。このうち、ルール＆マナー集で掲げた社会的責任や法的責任を問われる行為に該当する情報を発信することは固く禁じます。</p></li>
+					<li><p>利用者が本サイトを使用することで生じた利用者の直接または間接の損害については、利用者がその責任を負うものとし、新潟大学、UCLA及び<span class="display-city">南相馬市</span>は一切の責任を負わないものとします。利用者はそれぞれの責任と判断において、本サイトの利用を行ってください。</p></li>
+					<li><p>本サイトを利用した場合、利用者が本利用規約に同意したものと見なします。</p></li>
+					</ul>
+					<h2>２．必要な環境</h2>
+					
+					<p>推奨ブラウザ：　Internet Explorer 7以降、Chrome, Firefox 3以降、Opera 9以降、Safari 4以降</p>
+					<ul>
+						<li><p>IE 7ではPNG画像に対応していないため印刷に不具合が生じます。</p></li>
+					</ul>
+					<h2>３．その他の注意事項</h2>
+					<ul>
+					<li><p>本サイトが提供するマップは、測定及び地図情報を作成する上での誤差を含んでいますのでご注意ください。ご利用の際は、参考情報としてご利用ください。</p></li>
+					<li><p>本サイトの規約等（機能・コンテンツ・規約・説明その他すべて）は、内容を予告無しに変更、削除したりする場合があります。</p></li>
+					
+					<li><p>※このWeb-mapについてのお問合せはgis＠med.niigata-u.ac.jp（＠を全角から半角に変更してください）までお願いします。</p></li>
+					</ul>
+                </div>
+                <div class="tab-pane" id="2">
+					<div id="instructions">
+						<h1><span class="display-city">南相馬市</span>　空間線量率地図（Web版）について</h2>
+						<h2>１．背景と目的</h2>
+						<p>この空間線量率地図（Web版）（以下「本サイト」という）は、平成23年3月11日に発生した東日本大震災に続いて起きた福島第一原子力発電所事故により被災した方々の支援を目的に、新潟大学アイソトープ総合センター（センター長：　内藤　眞）が行う活動の一環としてUCLA(University of California Los Angeles: カリフォルニア大学ロサンゼルス校)と<span class="display-city">南相馬市</span>の協力を得て作成したものです。</p>
+						<p>空間線量率の測定は、道路周辺における放射性物質からの影響を詳細に把握するため、特に放射線の影響を受けやすい小児を念頭に置き、通学路を中心に小学校区ごとの道路上の線量率を測定することから始まりました。現在では<span class="display-city">南相馬市</span>の協力の下、市内の主要道路を測定しています。記録した測定値を基に本サイトでWeb-mapという形式で公開しています。</p>
+						<h2>２．空間線量率測定とWeb-map 作成の方法</h2>
+						<h3>空間線量率の測定について</h3>
+						<ul>
+						<li><p>空間線量率をNaIシンチレーションサーベイメータ(日立アロカメディカル製　TCS-172またはTCS-161、時定数3秒) で測定すると同時に、位置情報を GPSで取得して、通常の速度で走行する自動車内で1秒間に1回、測定値を記録しました。</p></li>
+						<li><p>自動車内で測定すると，空間線量率の測定値が実際より低くなるため、Web-mapに示した値は補正係数 (1.3) を乗じた値を使用しました。</p></li>
+						<li><p>測定は2011年9月に開始し、順次、測定結果を Web-map に追加しました。</p></li>
+						<li><p>地図に表示する前にエラーやノイズを含む測定値を手動で除きました。</p></li>
+						</ul>
+						<h3>測定値の信頼性と精度の限界について</h3>
+						<ul>
+						<li><p>移動しながらの測定では、線量率が急激に変化した場合に測定値が不正確になる可能性があります。</p>
+						<li><p>線量率の測定方法は上記の通りですが、測定値は常に周囲の状況の影響を受けます。例えば雨や雪の日では測定値が低くなります。特に積雪がある場合，低下の幅は非常に大きくなります。</p></li>
+						<li><p>位置情報はGPSを用いて測定しているため、GPSの誤差や地震による地盤の変化（移動やゆがみ）によって、地図情報との不整合が生じている可能性があります（例えば道路上で測定したはずなのに、道路外にはみだしているなど）。</p></li>
+						<li><p>測定値は上記及びその他の誤差を含んでいる値です。そのため、別の方法などによる測定値と一致しない場合があります。</p></li>
+						</ul>
+						<h3>Web-mapについて</h3>
+						<ul>
+						<li><p>測定された空間線量率と位置情報（緯度経度）に基づいて地図を作成し本サイトで公開しています。</p></li>
+						<li><p>画面に出てくる正方形（グリッド）の色が正方形内で測定した線量率の平均値を示します。正方形をクリックすると数字（平均値）が現れます。正方形内の全ての測定値を平均した値を代表値としました。正方形の中が全て同じ線量率という意味ではありません。</p></li>
+						<li><p>Web-map上では利用者のニーズに応じて自由に変更できる箇所があります。
+							<ol type="I">
+								<li><p>Web上の地図を基本にしているため拡大縮小が自在にできます。</p></li>
+								<li><p>表示するデータの時期を選ぶことができます。</p></li>
+								<li><p>線量率の値によって色分けされていますが、色分けの閾値を変更できます。</p></li>
+								<li><p>小学校区や避難区域のレイヤーを表示したり消したりすることができます。</p></li>
+								<li><p>背景は5種類あり、通常の地図の他に衛星写真、地形図、白と黒の背景を選べます。</p></li>
+							</ol>
+						</li>
+						</ul>
+						<p>今後は、定期的に市内の線量率を測定し、あらたな測定結果が得られ次第、本サイトに追加していく予定です。</p>
+						<p>なお、本サイトの利用にあたっては、本サイトの利用方法、提供している情報の意味を十分に確認、理解し、同意した上でご利用をお願いします。</p>
+						<p>本サイトに関するお問い合わせはgis＠med.niigata-u.ac.jp（＠を全角から半角に変更してください）にお願いします。</p>
+						<p>なお、お問い合わせに対してはすぐにご返答できない場合もありますので、御了承ください。</p>
+					</div>
+
+                </div>
+                <div class="tab-pane" id="3">
+                    <table border="0" cellpadding="0" cellspacing="0" width="95%" align="center">
+                        <tr>
+                            <td valign="top" rowspan="2">
+                                <!--<img src="images/bishamon.jpg"><br>-->
+                                <img src="https://lh5.googleusercontent.com/-1LuLicbf0cA/T343aFt2toI/AAAAAAAAIpk/mZ_MJxtjvOs/s180/P1100192.JPG" style="padding:10px;"><br>
+                                <img src="https://lh4.googleusercontent.com/-2Vqh839923k/T5HenDAGJWI/AAAAAAAAIw0/XUHf03VVyHY/s180/yohanddave.jpg" style="padding:10px;"><br>
+                                <!--<img src="https://lh4.googleusercontent.com/-7OZJJUdeKgg/TureyRY4wtI/AAAAAAAABV4/aF932DZ2e94/s128/CIMG2457.JPG" style="padding:3px;">-->
+                            </td>
+                            <td valign="top" width="100%" style="padding:0px;">
+                                <!--<div id="title" style="font-size:22px; font-weight:bold; color:#222; padding-bottom:10px; margin-bottom:10px; margin-top:0px; border-bottom:1px solid gainsboro; font-family:Tahoma, Geneva, sans-serif"></div>-->
+                                <div id="description" style="font-family:'Trebuchet MS', Arial, Helvetica, sans-serif; font-size:14px; padding: 10px;"></div>
+                            </td>
+                        </tr>
+                    </table>        	
+					<div class="well" style="text-align: center;">
+						<img src="images/niigata.gif" style="height: 20px;">
+						<img src="images/ucla.gif" style="height: 20px;">			
+					</div>
+                </div>
+            </div>
+        </div>
+  </div>
+  
+	<div class="modal-footer" style="text-align: center">
+		<button id="intro-red-button" data-dismiss="modal" class="btn-large btn btn-danger" onClick="$('#myModal').modal('toggle')">以上の注意を理解した上でWeb-mapを利用する</button>
+		<button id="intro-close-button" data-dismiss="modal" class="btn-large btn" style="display: none;" onClick="$('#myModal').modal('toggle')">close</button>
+
+	</div>
+</div>
+
+ 	<!-- Map Layers Checkboxes Modal -->
+    <div id="modal-legend" class="modal hide fade">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>地図レイヤー</h3>
+        </div>
+        <div class="modal-body" id="legend-container">
+        	
+            <table cellpadding="10">
+                <tr style="border-bottom:1px solid gainsboro;" id="layer-toggle-minamisoma-evacuation">
+                    <td><input type="checkbox" checked id="evacuation_order_lift_preparing_zone-toggle" class="legend-options"></td>
+                    <td id="evacuation_order_lift_preparing_zone-toggleText" class="legend-description">
+                        避難指示解除準備区域
+                    </td>
+                </tr>
+                <tr style="border-bottom:1px solid gainsboro;" id="layer-toggle-minamisoma-homing">
+                    <td><input type="checkbox" checked id="homing_difficulty_zone-toggle" class="legend-options"></td>
+                    <td id="homing_difficulty_zone-toggleText" class="legend-description">
+                        帰還困難区域
+                    </td>
+                </tr>
+                <tr style="border-bottom:1px solid gainsboro;" id="layer-toggle-minamisoma-residential">
+                    <td><input type="checkbox" checked id="residential_restrict_zone-toggle" class="legend-options"></td>
+                    <td id="residential_restrict_zone-toggleText" class="legend-description">
+                        居住制限区域
+                    </td>
+                </tr>
+                <tr style="border-bottom:1px solid gainsboro;" id="layer-toggle-minamisoma-school">
+                    <td><input type="checkbox" id="minamisoma-toggle" class="legend-options"></td>
+                    <td id="minamisoma-toggleText" class="legend-description">
+                        南相馬市小学校区
+                    </td>
+                </tr>
+                <tr style="border-bottom:1px solid gainsboro;">
+                    <td><input type="checkbox"  id="fukushima20kmAndEvacuationZone-toggle" class="legend-options"></td>
+                    <td id="fukushima20kmAndEvacuationZone-toggleText" class="legend-description">
+                        警戒区域/計画的避難区域
+                    </td>
+                </tr>
+                <tr id="layer-toggle-city">
+                    <td><input type="checkbox" checked id="japan_cities-toggle" class="legend-options"></td>
+                    <td id="japan_cities-toggleText" class="legend-description">
+                        City boundary
+                    </td>
+                </tr>
+                <!-- <tr id="layer-toggle-photos">
+                    <td><input type="checkbox" id="photos-toggle" class="legend-options"></td>
+                    <td id="photos-toggleText" class="legend-description">
+                        School Measurements
+                    </td>
+                </tr> -->
+            </table>
+        </div>
+        <div class="modal-footer">
+			<button data-dismiss="modal" class="btn-large btn " onClick="$('#modal-legend').modal('toggle')">close</button>
+        </div>
+    </div>
+
+ 	<!-- Search Modal 
+    <div id="modal-search" class="modal hide fade">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>場所検索</h3>
+        </div>
+        <div class="modal-body" id="legend-container">
+			<div class="well">
+				<input onFocus="$('.pac-container').css('z-index', 9999999);" type="text" style="margin: 0 auto;padding:20px; width:100% " id="location" placeholder="Search">
+			</div>        	
+        </div>
+        <div class="modal-footer">
+			<button data-dismiss="modal" class="btn-large btn " onClick="$('#modal-search').modal('toggle')">close</button>
+        </div>
+    </div>
+-->
+	
+	<!-- 
+		Footer 
+	<div id="footer" style="position:absolute; width:100%; text-align:right; bottom:0px; height:70px; background:black; opacity:0.8;filter:alpha(opacity=80);">
+    	<img src="images/bishamon.jpg" height="66" style="border:2px solid black; cursor:pointer" onClick="showintro()">
+    </div>	
+	-->
+	
+    <!-- Category Ranges: Map controls for radiation level and time -->
+    <div id="cat-ranges" class="btn btn-inverse" style="position:absolute; bottom:15px; right:9px; text-align:left; font:Verdana, Geneva, sans-serif; font-size:11px; color:#fff; z-index:999;">
+        
+        <div id="cattable" style="float:left; margin:10px">
+            <h4 id="display-radiationlevels">線量率レベル(μSv/h)</h4>
+            <table id="range">
+                <tr>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+	<!-- Microsieverts reading display -->
+    <div id="micro" style="text-align:center;  width: 200px;; z-index:999;" class="label label-inverse">
+    	<img id="radiationmarkerimage" src="images/radiationmarker.png" style="margin-bottom:20px;"><br>
+		<div id="micro-instructions" style="color:white; font-size:12px;font-weight:normal; word-wrap: break-word; white-space: normal; line-height: 1.5;">
+			<!-- 
+			Only areas that have been measured are shown on the map.
+    		Click on any of the grids to display the radiation levels for specific locations.
+			-->
+			地図上のグリッド（四角のマス）の色が、グリッド内の平均線量率を表します。グリッドをクリックすると値が表示されます。グリッドがない部分は道路がない等の理由により測定されていない箇所です。    		
+		</div>
+    	<div id="micro-radiation" style="line-height: 1.5"></div>
+        <div style="padding:5px;">µSv/hour</div>
+        <!--<span id="micro-samples"></span> samples<br>-->
+        <div id="micro-extra" style="line-height:1.3"></div>
+    </div>
+    
+
+</body>
+</html>

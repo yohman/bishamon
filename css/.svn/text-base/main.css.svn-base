@@ -1,0 +1,178 @@
+html 			{ height: 100% }
+body 			{ height: 100%; margin: 0; padding: 0; }
+
+/* Intro lightbox */
+#fullscreen 	{ position:absolute; top:0px; left:0px;width:100%;background:white;height:100%;display:none;opacity:0.8;filter:alpha(opacity=80); z-index:100}
+#lightbox		{ position:absolute;max-width:650px;max-height:650px; top:40; right:40; display:none; z-index:101; overflow:auto;}
+#introbox		{ position:relative; margin:auto;width:650px;height:400px;display:none; z-index:101; overflow:auto; border:1px solid #818181; background:white; padding:10px; box-shadow: 4px 4px 4px #777;}
+
+/* Map CSS */
+
+   .labels {
+     color: black;
+     font-family: "Lucida Grande", "Arial", sans-serif;
+     font-size: 10px;
+     font-weight: bold;
+     text-align: center;
+     white-space: nowrap;
+   }
+
+
+	#micro { 
+		position:absolute; 
+		bottom:130px; 
+		right:9px; 
+		padding:10px; 
+		/*background: black;*/
+		font-family:Verdana, Geneva, sans-serif;
+		color: #777;
+/*		opacity:0.8;filter:alpha(opacity=80); */
+	}
+	
+	#micro-radiation {
+		color: red;
+		font-size:45px;
+		font-weight:bold;
+	}
+	#micro-samples {
+		font-weight:bold;
+	}
+		
+
+	#search { 
+		position:absolute; 
+		top:120px; 
+		right:9px; 
+		padding:10px; 
+		/*
+background: white;
+*/
+		
+		/*
+		-moz-border-radius: 
+		5px;border-radius: 5px; 
+		*/
+	}
+	#legend { 
+		position:absolute; 
+		top:75px; 
+		right:9px; 
+		padding:10px; 
+		/*
+		background: white;
+		
+		-moz-border-radius: 
+		5px;border-radius: 5px; 
+		*/
+	}
+	.legend-item {
+		float:left; 
+		width: 80px; 
+		text-align:center; 
+		background:#ddd;
+		padding: 4px; 
+		margin:2px;
+		-moz-border-radius: 5px;
+		border-radius: 5px;
+		font-family:Arial, Helvetica, sans-serif; 
+	}
+	.legend-description {
+		width: 400px;
+		font-size:16px;
+		font-family: Verdana, Geneva, sans-serif;
+	}
+
+	.legend-options { 
+		font-size:11px;
+		float:left; 
+		text-align:center; 
+		background:#D7DBE1;
+		padding: 4px; 
+		margin:2px;
+		-moz-border-radius: 5px;
+		border-radius: 5px;
+		font-family:Arial, Helvetica, sans-serif; 
+		width:80px;
+		cursor:pointer; 
+		line-height:20px;
+	}
+	.clear {
+		clear:both;background:gainsboro; height:1px; margin:10px;
+	}
+	#radiationPointsToggleText {
+		cursor:pointer; line-height:20px;padding: 4px; margin:2px;font-family:Arial, Helvetica, sans-serif;
+	}
+	
+	.draggable {
+		cursor:move;
+	}
+	
+/* Slider CSS */
+	.rangeGrip{
+		width:10px;
+		height:19px;
+		cursor:e-resize;
+		background-image: url('../images/slider.png');
+		z-index:8;
+	}
+	
+	.rangeDrag .rangeGrip, .rangeGrip:hover{
+		background-position:right;
+	}
+	
+	#text{
+		color:#034a92;
+		float:right;
+	}
+	
+	#range{
+		padding:0;
+		border-spacing:0;
+		margin:0;
+		width: 600px;
+		border:1px solid #999;
+		color: #000;
+		/*box-shadow: 2px 2px 2px #777;*/
+	}
+	#range td{
+		height:33px;
+		border:none;
+		text-align:center;
+		font-family:Verdana, Geneva, sans-serif;
+		font-size:10px;
+	}	
+	
+	#cat0{
+		background-color:#ACE1A0;
+		border-right: 1px solid #2D6021 !important;
+	}
+	
+	#cat1{
+		background-color:#FFF798;
+		border-right: 1px solid #827807 !important;
+	}
+
+	#cat2{
+		background-color: #FFAF6E;
+		border-right: 1px solid #AB5D1D !important;
+	}
+	
+	#cat3{
+		background-color: #ACCEFD;
+		border-right: 1px solid #1A4C91 !important;
+	}
+	
+	#cat4{
+		background-color: #E1D2F2;
+	}
+
+	.bolden{
+		font-weight:bold;
+	}
+	
+/* Fusion tables infowindow */
+	#iw-radiation {
+		font-size:24px;
+		font-weight:bold;
+	}
+	

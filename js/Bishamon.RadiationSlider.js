@@ -1,0 +1,237 @@
+namespace.request("RadiationSlider", Bishamon);
+
+Bishamon.RadiationSlider = (function () {
+    var _colorList = ['#1A9641','#A6D96A','#FFFFBF','#FDAE61','#D7191C', '#800033'],
+	    _colorSchemes = [
+		    [0],
+		    [0, 4],
+		    [0, 2, 4],
+		    [0, 1, 3, 4],
+		    [0, 1, 2, 3, 4],
+            [0, 1, 2, 3, 4, 5]
+	    ],
+        _valueKeys = [],
+	    _maxRange = 2.0,
+	    _catRanges = [],
+	    _colorScheme = {},
+        _layers = null
+	    ;
+
+    var _getColorScheme = function ($length) {
+        var length = _catRanges.length;
+        if (typeof $length != 'undefined') {
+            length = $length;
+        }
+        var colorIndices = _colorSchemes[length];
+        var colors = [];
+        for (var i in colorIndices) {
+            colors.push(_colorList[colorIndices[i]]);
+        }
+        return colors;
+    };
+
+    var _onColumnResize = function ($e) {
+        var columns = $($e.currentTarget).find("td"),
+		    ranges = [], 
+		    total = 0, 
+		    s ="Ranges: ", 
+		    w,
+		    catTotal = 0
+        ;
+        _catRanges = [];
+        for(var i = 0; i<columns.length; i++) {
+            w = columns.eq(i).width();
+            ranges.push(w);
+            total+=w;
+        }
+        for(var i=0; i<columns.length; i++) {
+            ranges[i] = Math.round(100*ranges[i]/total);
+            catTotal = catTotal + (ranges[i]*_maxRange/100);
+            catTotal = Math.round(catTotal*100)/100;
+            _catRanges.push(catTotal);
+            if (i == 0) {
+                $('#cat'+i).html("0-"+_catRanges[i]);
+            } else if(i == columns.length-1) {
+                $('#cat'+i).html(_catRanges[i-1]+"+");
+            } else {
+                $('#cat'+i).html(_catRanges[i-1]+"-"+_catRanges[i]);
+            }
+        }		
+		
+        //get rid of the last value
+        _catRanges.pop();
+	
+        _setRangesAndRefreshLayer();
+    };
+
+    var _setRangesAndRefreshLayer = function ($colorScheme) {
+        if (typeof $colorScheme == 'undefined') { 
+            $colorScheme = [];
+            var colorSchemeIndex = _catRanges.length;
+            for (var i in _colorSchemes[colorSchemeIndex]) {
+                var colorKey = _colorSchemes[colorSchemeIndex][i];
+                $colorScheme.push(_colorList[colorKey]);
+            }
+        }
+        var colors = [];
+        for (var i in $colorScheme) {
+            colors.push({
+                fillColor: $colorScheme[i],
+                fillOpacity: 0.6
+            });
+        }
+        var scheme = {};
+        // keys of scheme are values in catRanges, which show the lowest
+        // value at which this style will be applied
+        scheme[0] = {
+            //where: 'radiation <= ' + _catRanges[0],
+            where: 'radiation <= ' + _catRanges[0],
+            polygonOptions: colors[0]
+        };
+        for (var i in _catRanges) {
+            i = parseInt(i);
+            var val = _catRanges[i];
+            scheme[val] = {
+                //where: 'radiation => ' + val + ' AND radiation <= '
+                where: 'radiation >= ' + val + ' AND radiation < '
+				    + _catRanges[i + 1],
+                // colors[ i + 1 ] because the first color is used already
+                polygonOptions: colors[i + 1]
+            };
+        }
+        scheme[_catRanges[_catRanges.length - 1]] = {
+            polygonOptions : colors[colors.length - 1],
+            where :  'radiation > ' + _catRanges[_catRanges.length - 1]
+        };
+        _colorScheme = scheme;
+        _valueKeys = [];
+        for (var i in _colorScheme) {
+            _valueKeys.push(i);
+        }
+        _valueKeys.sort();
+        for (var l in _layers) {
+            _layers[l].redraw(scheme);
+        }
+    };
+    
+    var _onColumnSlide = function ($e) {
+        var columns = $($e.currentTarget).find("td"),
+		    ranges = [], 
+		    total = 0, 
+		    w,
+		    catTotal = 0
+        ;
+
+        _catRanges = [];
+	
+        for(var i = 0; i<columns.length; i++) {
+            //w = columns.eq(i).width()-10 - (i==0?1:0);
+            w = columns.eq(i).width();
+            ranges.push(w);
+            total += w;
+        }
+	
+        for(var i=0; i<columns.length; i++) {
+            ranges[i] = Math.round(100*ranges[i]/total);
+            catTotal = catTotal + (ranges[i]*_maxRange/100);
+            catTotal = Math.round(catTotal*100)/100;
+            _catRanges.push(catTotal);
+            if(i == 0) {
+                $('#cat'+i).html("0-"+_catRanges[i]);
+            } else if(i == columns.length-1) {
+                $('#cat'+i).html(_catRanges[i-1]+"+");
+            } else {
+                $('#cat'+i).html(_catRanges[i-1]+"-"+_catRanges[i]);
+            }
+        }		
+	
+        //get rid of the last value
+        _catRanges.pop();
+    };
+    
+    return {
+        init: function ($layers, $options) {
+            _layers = $layers;
+            // get color scheme and set up ranges
+            _maxRange = $options.maxRange;
+            _catRanges = $options.catRanges ? $options.catRanges : [0.3,0.6,0.9,1.2];
+
+            if (typeof $options.city != "undefined"  
+                && typeof Bishamon.Config[$options.city] != "undefined"
+                && typeof Bishamon.Config[$options.city].RadiationSlider != "undefined"
+                ) {
+                _maxRange = Bishamon.Config[$options.city].RadiationSlider.maxRange;
+                _catRanges = Bishamon.Config[$options.city].RadiationSlider.catRanges;
+            }
+                    
+            
+            var subtotalwidth = 0,
+			    colors = _getColorScheme(_catRanges.length);
+            
+            $.each(_catRanges,function(i,val){
+                var tablewidth = val / _maxRange*100 - subtotalwidth;
+                subtotalwidth = subtotalwidth + tablewidth;
+		
+                $("#range tr").append('<td id="cat'+i+'" width="'+tablewidth+'%"></td>');
+            });
+            //add the last category
+            $("#range tr").append('<td id="cat'+(_catRanges.length)+'" ></td>');
+
+            //enable dragging between columns	
+            $("#range").colResizable({
+                liveDrag: true, 
+                draggingClass: "rangeDrag", 
+                gripInnerHtml: "<div class='rangeGrip'></div>", 
+                onDrag: _onColumnSlide,
+                onResize: _onColumnResize,
+                minWidth: 8
+            });
+
+            //Fill in the range slider colors
+            for(var i = 0; i < _catRanges.length + 1; i++) {
+                $('#cat'+i).css('background', colors[i]);
+
+                if(i == 0) {
+                    $('#cat'+i).html("0-"+_catRanges[i]);
+                } else if(i == _catRanges.length) {
+                    $('#cat'+i).html(_catRanges[i-1]+"+");
+                } else {
+                    $('#cat'+i).html(_catRanges[i-1]+"-"+_catRanges[i]);
+                }
+            };	
+	
+            _setRangesAndRefreshLayer(colors);
+        }, 
+        getRadiationBreakpoint: function ($value) {
+            if ($value <= _catRanges[0]) return { 
+			    fileKey : _colorScheme[0].polygonOptions.fillColor.substr(1),
+                color: _colorScheme[0].polygonOptions.fillColor
+            };
+
+            for (var i in _catRanges) {
+                i = parseInt(i);
+                var key = _catRanges[i];
+                // Assign border values to the higher color, because that
+                // is what Google seems to be doing, though it's not what
+                // we specify.
+                if ($value >= _catRanges[i] && $value < _catRanges[i + 1]) {
+                    return { 
+                        // filename uses hex code without #
+						fileKey : _colorScheme[key].polygonOptions.fillColor.substr(1),
+                        color : _colorScheme[key].polygonOptions.fillColor
+                    };
+                }
+            }
+
+            // if no match has been found, it's greater than the highest value
+            // so return the last color.
+            return { 
+                color : _colorScheme[key].polygonOptions.fillColor,
+                fileKey : _colorScheme[key].polygonOptions.fillColor.substr(1)
+            };
+        }, 
+        getRanges : function ($value) {
+            return _catRanges;
+        }
+    }
+})();
