@@ -1,0 +1,5 @@
+RewriteEngine on
+
+# TODO: change this to the root directory
+RewriteBase D:\inetpub2\wwwroot\bishamon
+RewriteRule ^[^\./]*$ index.html [L,QSA]
