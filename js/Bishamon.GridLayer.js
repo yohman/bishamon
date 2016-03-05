@@ -163,17 +163,24 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
             3447799 : "1MHEk95o-jVBLOsivLHvndQvUIv3Rfe-mQps36tE",
             3448840 : "1Yk6M8jikQbbyRcYPy4fEM2pH4DUIT5dcOl8ZUHY",
 			
-			//2012 Q3
-			5417690 : "1ZSQLIiI2oiD3VoIVE_iHtH_qFlS1Tmw3gZ2wC6A",	//3200
-			5418950 : "1YUKhl3D1grRoV4zKz0x81keZ0E6vFvW1wce_uXI",	//1600
-			5417972 : "1o4N6Ofb0F1_duRSHtxUmpeSlGGIfS2YNBeWnwvU",	//800
-			5419936 : "1UAEJ0II3o0KKOuNx6OakM6Ew8KKrpFdn1PZnv7I",	//400
-			// 5425574 : "1fH295hjcGj_0pz1PnzdCcHa6CykydTFroRksJlg",    //200 merged tables deleted in fusion tables
-            5425574 : "1ES-NoqHpMDbxTpsynCJkbLIQdzxDU_ptTH5l4B8",   //200
-            
+            //2012 Q3
+            // 5417690 : "1ZSQLIiI2oiD3VoIVE_iHtH_qFlS1Tmw3gZ2wC6A",   //3200
+            // 5418950 : "1YUKhl3D1grRoV4zKz0x81keZ0E6vFvW1wce_uXI",   //1600
+            // 5417972 : "1o4N6Ofb0F1_duRSHtxUmpeSlGGIfS2YNBeWnwvU",   //800
+            // 5419936 : "1UAEJ0II3o0KKOuNx6OakM6Ew8KKrpFdn1PZnv7I",   //400
+            // 5425574 : "1ES-NoqHpMDbxTpsynCJkbLIQdzxDU_ptTH5l4B8",   //200
+            // 5429704 : "13ePoQrGl4eB7whlYqYsqEmPYC4nzadnlz0LtXO0",   //100
+            // 5425882 : "19-hf9I4XjXqn3LzU7py-ch4AqwX07v55Hfjux9I",   //50
 
-			5429704 : "13ePoQrGl4eB7whlYqYsqEmPYC4nzadnlz0LtXO0",	//100
-			5425882 : "19-hf9I4XjXqn3LzU7py-ch4AqwX07v55Hfjux9I",	//50
+            //2012 Q3
+            5417690 : "1-FPaO11UjeRKV3TUJxc_bZgGm1X1sYL7FCAKk1FC",   //3200
+            5418950 : "1QBIwca2jwArlqvpkNqGAbegLAKXDp6Gp54kcRZa2",   //1600
+            5417972 : "18iHkje5DtsXWrCFP9Z3nVSuos12voWDQ5yXaF1WQ",   //800
+            5419936 : "133rZ42FvoTGpmVwhH-WI1Xw2wlWAP5TS7soFaRuQ",   //400
+            5425574 : "11V3JohOwLBh6HJuyXhOPq8OxyimcRwzypWxxLQuK",   //200
+            5429704 : "1KnM0NBqCV4ATVdF4quWfFIhcaA8qJUD9CrgcoLyC",   //100
+            5425882 : "17bzJq_szmiHTT5pBIEXW4Fx6mubkIU6C4iBi67a-",   //50
+
 
             20133200    : "1om6oH9XvFiUj6KdPjE46Hsc6PeEtnaScrS02jJ0", 
             20131600    : "1rIPbZ_ukTO9-lLnJWksfNOO6vRAO45kwY4Mtaeo",
