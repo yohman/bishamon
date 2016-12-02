@@ -11,7 +11,7 @@ Bishamon.Config = {
 
     namie: {
         GridLayer: {
-            defaultDate: "2016"
+            defaultDate: "2012_Q3"
         },
         RadiationSlider: {
             maxRange: 15.0,
@@ -25,7 +25,7 @@ Bishamon.Config = {
     },
     minamisoma: {
         GridLayer: {
-            defaultDate: "2013_09"
+            defaultDate: "2016"
         }
     } 
 
