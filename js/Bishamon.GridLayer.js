@@ -30,7 +30,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2012_Q3' : 5417690,
                     '2013_Q1' : 20133200,
                     '2013_09' : 2013093200,
-                    '2014_08' : 2014083200
+                    '2014_08' : 2014083200,
+                    '2016'    : 20163200
                 }
             }, 
             '1600' : {
@@ -44,7 +45,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2012_Q3' : 5418950,
                     '2013_Q1' : 20131600,
                     '2013_09' : 2013091600,
-                    '2014_08' : 2014081600
+                    '2014_08' : 2014081600,
+                    '2016'    : 20161600
                 }
             }, 
             '800': {
@@ -58,7 +60,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2012_Q3' : 5417972,
                     '2013_Q1' : 2013800,
                     '2013_09' : 201309800,
-                    '2014_08' : 201408800
+                    '2014_08' : 201408800,
+                    '2016'    : 2016800
                 }
             },
             '400': {
@@ -72,7 +75,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2012_Q3' : 5419936,
                     '2013_Q1' : 2013400,
                     '2013_09' : 201309400,
-                    '2014_08' : 201408400
+                    '2014_08' : 201408400,
+                    '2016'    : 2016400
                 }
             },
             '200': {
@@ -86,7 +90,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2012_Q3' : 5425574,
                     '2013_Q1' : 2013200,
                     '2013_09' : 201309200,
-                    '2014_08' : 201408200
+                    '2014_08' : 201408200,
+                    '2016'    : 2016200,
                 }
             },
             '100': {
@@ -100,7 +105,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2012_Q3' : 5429704,
                     '2013_Q1' : 2013100,
                     '2013_09' : 201309100,
-                    '2014_08' : 201408100
+                    '2014_08' : 201408100,
+                    '2016'    : 2016100
                 }
             },
             '50': {
@@ -114,7 +120,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2012_Q3' : 5425882,
                     '2013_Q1' : 201350,
                     '2013_09' : 20130950,
-                    '2014_08' : 20140850
+                    '2014_08' : 20140850,
+                    '2016'    : 201650
                 }
             } 
         },
@@ -208,16 +215,25 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
 			// 201408100    : "1TXnYDFVXXjyCB6WCIKbKW1OBQDhgWFtFbGk1zPYc",
 			// 20140850     : "1nxDkChwPtU2xVNYKttnT7CvxFZtrLx_bVJo9A7g-"
 
-			// updated again 2014 09 24
-			2014083200   : "1xhSB8qzvOy-aYX9uyClwxFznubhVnGwcK_-rUL1x", 
-			2014081600   : "1fEAMbEAMq6ibFVPVKg7dTv9m1iVooYHGOUjZdt6H",
-			201408800    : "1AGdM4diNYAkdvzF0BB0nZ97YFUNtP_FbvhaBNygy",
-			201408400    : "11GeT2daPWRzc_g8i6MiUnPTXY6v-9yzb5fCe0wu0",
-			201408200    : "1n2DsB9RKhFaPAvjcLsL1tMWdl-RS2eNvsCSywqhz",
-			201408100    : "1969ivoZuJVpvXGvq589RTuL3yMcWl2K7RVuFeoSg",
-			20140850     : "1q-wyCfuczMQ8YXA-7Ar26a4pHQJEXISWhvP4mMQw"
+            // updated again 2014 09 24
+            2014083200   : "1xhSB8qzvOy-aYX9uyClwxFznubhVnGwcK_-rUL1x", 
+            2014081600   : "1fEAMbEAMq6ibFVPVKg7dTv9m1iVooYHGOUjZdt6H",
+            201408800    : "1AGdM4diNYAkdvzF0BB0nZ97YFUNtP_FbvhaBNygy",
+            201408400    : "11GeT2daPWRzc_g8i6MiUnPTXY6v-9yzb5fCe0wu0",
+            201408200    : "1n2DsB9RKhFaPAvjcLsL1tMWdl-RS2eNvsCSywqhz",
+            201408100    : "1969ivoZuJVpvXGvq589RTuL3yMcWl2K7RVuFeoSg",
+            20140850     : "1q-wyCfuczMQ8YXA-7Ar26a4pHQJEXISWhvP4mMQw",
 
-			
+			// updated again 2016 12 01
+            // (Output0 = 50, Output6 = 3200)
+			20163200   : "1_MbTQJ3tgNfJwz2sAno2MAtVeDy_U9Zi9Xdf_rb2", 
+			20161600   : "12SsIQikiJ0O_NjGzrnq3I4Be65rC2QuoxFqkce0j",
+			2016800    : "1Dy0wlv6kNax85mDe2_KzPzwo1-geAZXQLuTX3w9a",
+			2016400    : "138Js8JlcU2ynMdwENUp-oFM4u-HGVMWyAS0Lg982",
+			2016200    : "1pRRb6HnmL0gJZIy3_Gin-ObK74SuX4sQyQmD3KMg",
+			2016100    : "1kciHNRmG_Mhx7QhiIGctUSrNBS6xJwDDPZt_hf2z",
+			201650     : "1TkkdE5MUJuruCMm7feE5GeJ-j22HjdQDmc7GkL_k"
+	
         },
         _clipToCity = $options.clipToCity,
         _cityClipPoints = $options.cityClipPoints
