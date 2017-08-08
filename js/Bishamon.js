@@ -150,7 +150,7 @@ Bishamon = (function () {
 		_map.fitBounds(bounds);
 
         //default date for map1
-        var map1date = "2016";
+        var map1date = "2017";
         var map2date = "2012_Q1";
 
         //Draw the radiation data layer

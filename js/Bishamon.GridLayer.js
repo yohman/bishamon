@@ -31,7 +31,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2013_Q1' : 20133200,
                     '2013_09' : 2013093200,
                     '2014_08' : 2014083200,
-                    '2016'    : 20163200
+                    '2016'    : 20163200,
+                    '2017'    : 20173200,
                 }
             }, 
             '1600' : {
@@ -46,7 +47,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2013_Q1' : 20131600,
                     '2013_09' : 2013091600,
                     '2014_08' : 2014081600,
-                    '2016'    : 20161600
+                    '2016'    : 20161600,
+                    '2017'    : 20171600,
                 }
             }, 
             '800': {
@@ -61,7 +63,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2013_Q1' : 2013800,
                     '2013_09' : 201309800,
                     '2014_08' : 201408800,
-                    '2016'    : 2016800
+                    '2016'    : 2016800,
+                    '2017'    : 2017800,
                 }
             },
             '400': {
@@ -76,7 +79,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2013_Q1' : 2013400,
                     '2013_09' : 201309400,
                     '2014_08' : 201408400,
-                    '2016'    : 2016400
+                    '2016'    : 2016400,
+                    '2017'    : 2017400,
                 }
             },
             '200': {
@@ -92,6 +96,7 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2013_09' : 201309200,
                     '2014_08' : 201408200,
                     '2016'    : 2016200,
+                    '2017'    : 2017200,
                 }
             },
             '100': {
@@ -106,7 +111,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2013_Q1' : 2013100,
                     '2013_09' : 201309100,
                     '2014_08' : 201408100,
-                    '2016'    : 2016100
+                    '2016'    : 2016100,
+                    '2017'    : 2017100,
                 }
             },
             '50': {
@@ -121,7 +127,8 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
                     '2013_Q1' : 201350,
                     '2013_09' : 20130950,
                     '2014_08' : 20140850,
-                    '2016'    : 201650
+                    '2016'    : 201650,
+                    '2017'    : 201750,
                 }
             } 
         },
@@ -224,15 +231,25 @@ Bishamon.GridLayer = (function ($map, $options, $date, $dateSelector) {
             201408100    : "1969ivoZuJVpvXGvq589RTuL3yMcWl2K7RVuFeoSg",
             20140850     : "1q-wyCfuczMQ8YXA-7Ar26a4pHQJEXISWhvP4mMQw",
 
-			// updated again 2016 12 01
+            // updated again 2016 12 01
             // (Output0 = 50, Output6 = 3200)
-			20163200   : "1_MbTQJ3tgNfJwz2sAno2MAtVeDy_U9Zi9Xdf_rb2", 
-			20161600   : "12SsIQikiJ0O_NjGzrnq3I4Be65rC2QuoxFqkce0j",
-			2016800    : "1Dy0wlv6kNax85mDe2_KzPzwo1-geAZXQLuTX3w9a",
-			2016400    : "138Js8JlcU2ynMdwENUp-oFM4u-HGVMWyAS0Lg982",
-			2016200    : "1pRRb6HnmL0gJZIy3_Gin-ObK74SuX4sQyQmD3KMg",
-			2016100    : "1kciHNRmG_Mhx7QhiIGctUSrNBS6xJwDDPZt_hf2z",
-			201650     : "1TkkdE5MUJuruCMm7feE5GeJ-j22HjdQDmc7GkL_k"
+            20163200   : "1_MbTQJ3tgNfJwz2sAno2MAtVeDy_U9Zi9Xdf_rb2", 
+            20161600   : "12SsIQikiJ0O_NjGzrnq3I4Be65rC2QuoxFqkce0j",
+            2016800    : "1Dy0wlv6kNax85mDe2_KzPzwo1-geAZXQLuTX3w9a",
+            2016400    : "138Js8JlcU2ynMdwENUp-oFM4u-HGVMWyAS0Lg982",
+            2016200    : "1pRRb6HnmL0gJZIy3_Gin-ObK74SuX4sQyQmD3KMg",
+            2016100    : "1kciHNRmG_Mhx7QhiIGctUSrNBS6xJwDDPZt_hf2z",
+            201650     : "1TkkdE5MUJuruCMm7feE5GeJ-j22HjdQDmc7GkL_k",
+    
+			// updated again 2017 08 08
+            // (Output0 = 50, Output6 = 3200)
+			20173200   : "16xaefaCUNP3LACQDPtGiHDvRM_aVDgFiVtmzrU5k", 
+			20171600   : "1pH6bVygIngNpvUVKQ3mVz0WEtNR9vCSTHtxNzSvM",
+			2017800    : "1iDuO75Jx1r3jpkKDg3KlnvwRPypBaRWk8EpS-3wx",
+			2017400    : "1kc-dHd0uQWuQ8op11d30jZ04DbzcsQitKASHdsUi",
+			2017200    : "1De05kKjsMAD_lF9zImEA0CKeXgx1GxnvIgIDdyTn",
+			2017100    : "1XaMnZatJ6xjnkfHOlwlLbHug4pCGmXW-1vKmzXId",
+			201750     : "1XaMnZatJ6xjnkfHOlwlLbHug4pCGmXW-1vKmzXId",
 	
         },
         _clipToCity = $options.clipToCity,
