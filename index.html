@@ -21,7 +21,10 @@
 <script  src="js/colResizable-1.3.min.js"></script>
 
 <!-- Google Maps -->
-<script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places" type="text/javascript"></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places" type="text/javascript"></script> -->
+
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAj_tQf-bp0v3j6Pl8S7HQVO5I-D5WI0GQ"
+  type="text/javascript"></script>
 
 <!-- Marker with label -->
 <script src="js/markerwithlabel_packed.js"></script>
@@ -31,7 +34,7 @@
 <script src="js/namespace.js"></script>
 <script src="js/Bishamon.js"></script>
 <script src="js/Bishamon.Config.js"></script>
-<script src="js/Bishamon.CitySearch.js"></script>
+<!-- <script src="js/Bishamon.CitySearch.js"></script> -->
 <script src="js/Bishamon.GridLayer.js"></script>
 <script src="js/Bishamon.Intro.js"></script>
 <script src="js/Bishamon.LayerSelector.js"></script>
@@ -115,10 +118,10 @@ $(document).ready(function() {
 
 
 				<ul class="nav pull-right">
-					<form class="navbar-search pull-left" action="">
+					<!-- <form class="navbar-search pull-left" action="">
 						<input class="input-medium search-query " onFocus="$(this).animate({width:'400px'});" onBlur="$(this).animate({width:'200px'});" type="text"  id="location" placeholder="場所検索">
 
-					</form>
+					</form> -->
 					<li class="active"><a data-toggle="modal" href="#modal-intro" onClick="$('#intro-close').show();$('#intro-close-button').show();$('#intro-red-button').hide();">About</a></li>
 					<li class="divider-vertical"></li>
 				</ul>

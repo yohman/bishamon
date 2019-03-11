@@ -127,7 +127,7 @@ Bishamon = (function () {
         });
 
 
-		Bishamon.CitySearch.init(_map, bounds);
+		// Bishamon.CitySearch.init(_map, bounds);
 
 		//City override
         var possibleCity = window.location.pathname
